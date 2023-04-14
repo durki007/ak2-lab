@@ -19,7 +19,7 @@ _start:
 mov $WRITE_NR, %eax 
 mov $STDOUT  , %ebx 
 mov $msg     , %ecx 
-mov $msgLen  , %edx 
+mov $5, %edx 
 int $0x80
 
 
