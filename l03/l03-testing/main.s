@@ -11,7 +11,7 @@ STDIN = 0
 EXIT_CODE_SUCCESS = 0
 BUF_SIZE = 100 
 
-.data
+.bss
 len: .fill 10, 1, 0x00
 buf: .fill BUF_SIZE, 1, 0x00
 
