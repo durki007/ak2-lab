@@ -11,7 +11,8 @@ print_asm:
     // leaq    mes(%rip), %rsi
     // mov     cmsg, %rsi
     // leaq    mes(%rip), %rsi
-    mov     cmesg, $rsi
+    leaq    cmsg(%rip), %rsi
+    mov     (%rsi), %rsi
     call    printf
 
     xor     %rax, %rax
