@@ -16,7 +16,8 @@ fmt_sw: .string "Status word: %x\n"
 .type	main, @function
 
 main:
-	subq	$8, %rsp
+    
+    subq	$8, %rsp
 
     // Initialize FPU
     finit

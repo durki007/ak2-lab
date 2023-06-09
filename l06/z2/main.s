@@ -1,6 +1,7 @@
 .data
-float1: .float 2.0
-float2: .space 4
+float1: .int 0x33800000
+float2: .int 0x3fc00000
+float3: .int 0x34000000
 floatres: .float 4.0
 fcw: .space 2
 fsw: .space 2
@@ -28,14 +29,11 @@ main:
     andw    $0xfcff, %ax
     movw    %ax, fcw
     fldcw   fcw
-    // Create denormalized operand
-    mov     $0x00400000, %eax
-    mov     %eax, float2
-    // Load to FPU
+
+    // Load 1.0 to FPU
     flds    float1
-    flds    float2 
-    // Add
-    faddp 
+    flds    float3
+    faddp
     // Store result
     fstps    floatres
     // Store status word
