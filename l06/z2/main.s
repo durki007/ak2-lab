@@ -1,10 +1,9 @@
 .data
-float1: .float 1.0
-float2: .float 3.0
-float3: .int 0x34000000
+float1: .float 0.1
+float2: .float 0.2
 floatres: .float 0.0
-double1: .double 1.0
-double2: .double 3.0
+double1: .double 0.1
+double2: .double 0.2
 doubleres: .double 0.0
 
 fcw: .space 2
@@ -65,7 +64,7 @@ main:
     // Load to FPU
     flds    float2
     flds    float1
-    fdivp
+    faddp
     // Store result
     fstps   floatres
     // Store status word
@@ -87,10 +86,14 @@ main:
     // Load 
     fldl    double2
     fldl    double1
-    fdivp
+    faddp
 
     // Store result
     fstpl   doubleres
+
+    // Store status word
+    fstsw   fsw
+    call    print_sw
 
     // Print result
     mov     doubleres, %rdi

@@ -1,8 +1,10 @@
 Uruchomienie:
 `make run`
 
-Program wywołuje wyjątek DE (Denoramlized Operand)
-i wypisuje status word w formacie hex na standardowe wyjście.
-Status word 0x22 - 2 bit od prawej to DE
+Program dodaje dwie liczby
+Z których obie mają nieskończone rozwinięcie w formacie binarnym:
 
-DIV0 i Overflow
+0.1 + 0.2
+
+Najpierw w typie float, a potem double
+Na standardowe wyjscie wypisywany jest wynik tych operacji z dokładnoscia do 30 miejsc po przecinku
