@@ -17,6 +17,22 @@ fmt_float: .string "Wynik operacji: 0x%x\n"
 fmt_sw: .string "Status word: 0x%x\n"
 
 .text
+
+print_sw:
+	subq	$8, %rsp
+    // Print status word
+    xorq    %rax, %rax
+    movw    fsw, %ax
+    leaq    fmt_sw(%rip), %rdi
+    movq    %rax, %rsi
+    call    printf
+
+	xorl	%eax, %eax
+	addq	$8, %rsp
+    ret
+
+
+
 .globl	main
 .type	main, @function
 
@@ -46,7 +62,7 @@ main:
     movw    %ax, fcw
     fldcw   fcw
 
-    // Load 1.0 to FPU
+    // Load to FPU
     flds    float2
     flds    float1
     fdivp
@@ -54,16 +70,31 @@ main:
     fstps   floatres
     // Store status word
     fstsw   fsw
-    // Print status word
-    xorq    %rax, %rax
-    movw    fsw, %ax
-    leaq    fmt_sw(%rip), %rdi
-    movq    %rax, %rsi
-    call    printf
+    call    print_sw
 
     // Print result
     mov     floatres, %rdi
     call    print_result_float
+
+    // Set double mode
+    fstcw   fcw
+    movw    fcw, %ax
+    // 64 bit double mode
+    orw     $0x0200, %ax
+    movw    %ax, fcw
+    fldcw   fcw
+
+    // Load 
+    fldl    double2
+    fldl    double1
+    fdivp
+
+    // Store result
+    fstpl   doubleres
+
+    // Print result
+    mov     doubleres, %rdi
+    call    print_result_double
 
     // Main end
 	xorl	%eax, %eax
