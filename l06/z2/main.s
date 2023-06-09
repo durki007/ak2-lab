@@ -1,8 +1,12 @@
 .data
-float1: .int 0x33800000
-float2: .int 0x3fc00000
+float1: .float 1.0
+float2: .float 3.0
 float3: .int 0x34000000
-floatres: .float 4.0
+floatres: .float 0.0
+double1: .double 1.0
+double2: .double 3.0
+doubleres: .double 0.0
+
 fcw: .space 2
 fsw: .space 2
 
@@ -19,6 +23,18 @@ fmt_sw: .string "Status word: 0x%x\n"
 main:
 	subq	$8, %rsp
 
+    mov     float1, %rdi
+	call    print_float
+
+	mov     float2, %rdi
+	call    print_float
+
+	mov     double1, %rdi
+	call    print_double
+
+	mov     double2, %rdi
+	call    print_double
+
     // Initialize FPU
     finit
 
@@ -31,25 +47,23 @@ main:
     fldcw   fcw
 
     // Load 1.0 to FPU
+    flds    float2
     flds    float1
-    flds    float3
-    faddp
+    fdivp
     // Store result
-    fstps    floatres
+    fstps   floatres
     // Store status word
     fstsw   fsw
+    // Print status word
     xorq    %rax, %rax
     movw    fsw, %ax
-
-    // Print status word
     leaq    fmt_sw(%rip), %rdi
     movq    %rax, %rsi
     call    printf
 
     // Print result
-	leaq	fmt_float(%rip), %rdi
-    movq	floatres(%rip), %rsi
-    call    printf
+    mov     floatres, %rdi
+    call    print_result_float
 
     // Main end
 	xorl	%eax, %eax
