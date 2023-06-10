@@ -6,6 +6,7 @@ extern void sequential();
 extern void paralel();
 
 int main() {
+  init_fpu();
   long int result = measure();
   long int result2 = measure();
   printf("Result: %ld\n", result);

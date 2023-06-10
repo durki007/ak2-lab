@@ -10,41 +10,53 @@ fsw: .space 2
 .globl  measure	
 .type	measure, @function
 measure:
-	subq	$8, %rsp
-    
-  xor     %rax, %rax
-  xor     %rdx, %rdx
-  cpuid
-  rdtsc     
-  // Time stored in %edx:%eax
-  rol     $32, %rdx
-  movl    %eax, %edx
-  mov     %rdx, %rax
+    subq	  $8, %rsp
+    xor     %rax, %rax
+    xor     %rdx, %rdx
+    cpuid
+    rdtsc     
+    // Time stored in %edx:%eax
+    rol     $32, %rdx
+    movl    %eax, %edx
+    mov     %rdx, %rax
 
-	addq	$8, %rsp
-  ret
+    addq	$8, %rsp
+    ret
 
 .globl sequential 
 .type	sequential, @function
 sequential:
-  subq  $8, %rsp  
-  xor   %rax, %rax
-	addq	$8, %rsp
-  ret
+    subq  $8, %rsp  
+    xor   %rax, %rax
+    addq	$8, %rsp
+    ret
 
 .globl paralel 
 .type	paralel, @function
 paralel:
-  subq  $8, %rsp  
-  xor   %rax, %rax
-	addq	$8, %rsp
-  ret
+    subq  $8, %rsp  
+    xor   %rax, %rax
+    addq	$8, %rsp
+    ret
 
 .globl init_fpu 
 .type	init_fpu, @function
 init_fpu:
-  subq  $8, %rsp  
+    subq  $8, %rsp  
 
-  xor   %rax, %rax
-	addq	$8, %rsp
-  ret
+    // Initialize FPU
+    finit
+
+    // Set float mode
+    fstcw   fcw
+    movw    fcw, %ax
+    // 32 bit float mode
+    andw    $0xf0ff, %ax
+    // Round to +inf
+    orw     $0x0800, %ax
+    movw    %ax, fcw
+    fldcw   fcw
+
+    xor   %rax, %rax
+    addq	$8, %rsp
+    ret
