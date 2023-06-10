@@ -1,3 +1,5 @@
+# Zadanie 3 - Demonstracja metod zaokrąglania
+
 Uruchomienie:
 `make run`
 

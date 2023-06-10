@@ -1,3 +1,5 @@
+# Zad 1a - Wywołanie wyjątku div 0
+
 Uruchomienie:
 `make run`
 

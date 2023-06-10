@@ -1,3 +1,5 @@
+# Zadanie 2 - Demonstracja trybów precyzji
+
 Uruchomienie:
 `make run`
 
