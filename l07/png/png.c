@@ -33,22 +33,14 @@ void filter(unsigned char *M, unsigned char *W, int width, int height) {
   }
 }
 
-long int unpack(long int x, long int y, unsigned long last) {
-  short int a1 = x & 0x0ff;
-  short int a2 = (x >> 16) & 0x0ff;
-  short int a3 = (x >> 32) & 0x0ff;
-  short int a4 = (x >> 48) & 0x0ff;
-  long int a = a1 + a2 + a3 + a4;
-  // a = a << 2; // powrot do pierwotnych wartosci
-  a *= 4;
+long int unpack(unsigned long int x, unsigned long int y, unsigned long last) {
+  short *t1 = (short *)&x;
+  short *t2 = (short *)&y;
+  long int a = t1[0] + t1[1] + t1[2] + t1[3];
+  // a *= 2;
   a += last;
-  short int b1 = x & 0x0ff;
-  short int b2 = (x >> 16) & 0x0ff;
-  short int b3 = (x >> 32) & 0x0ff;
-  short int b4 = (x >> 48) & 0x0ff;
-  short int b = b1 + b2 + b3 + b4;
-  // b = b << 2; // powrot do pierwotnych wbrtosci
-  b *= 4;
+  long int b = t2[0] + t2[1] + t2[2] + t2[3];
+  // b *= 2;
   return (a + b + 765) / 6;
 }
 
