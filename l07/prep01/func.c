@@ -5,15 +5,16 @@ void print_quad(unsigned long int x) {
   return;
 }
 
-unsigned long int pack_words(unsigned long int a, unsigned long int b, unsigned long int c, unsigned long int d){
+unsigned long int pack_words(unsigned long int a, unsigned long int b,
+                             unsigned long int c, unsigned long int d) {
   // Mask
   a &= 0x0000ffff;
   b &= 0x0000ffff;
   c &= 0x0000ffff;
   d &= 0x0000ffff;
-  // Shift 
+  // Shift
   a <<= 48;
-  b <<= 32;
+
   c <<= 16;
   // Return sum
   return a + b + c + d;
