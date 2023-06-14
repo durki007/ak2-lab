@@ -41,7 +41,11 @@ long int unpack(unsigned long int x, unsigned long int y, unsigned long last) {
   a += last;
   long int b = t2[0] + t2[1] + t2[2] + t2[3];
   // b *= 2;
-  return (a + b + 765) / 6;
+  long int normalised = (a + b + 765) / 6;
+  if (normalised > 255 || normalised < 0) {
+    printf("%ld", normalised);
+  }
+  return normalised;
 }
 
 int main(int argc, char **argv) {

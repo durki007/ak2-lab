@@ -16,9 +16,9 @@ convolute:
     // First 8 bytes
     movq    %rdi, %mm0
     // Divide by 2
-    movq    $2, %rdi
-    movq    %rdi, %mm1
-    psrlq   %mm1, %mm0
+    // movq    $2, %rdi
+    // movq    %rdi, %mm1
+    // psrlq   %mm1, %mm0
     // Copy 8 high bytes to mm1 
     movq    %mm0, %rsi
     shrq    $32, %rsi
