@@ -10,26 +10,23 @@ div2:
 convolute:
     subq	$8, %rsp
     // Clean mmx
-    emms
     movq    %rsi, %rdx
     // Load matrix to mmx registers
     // First 8 bytes
     movq    %rdi, %mm0
-    // Divide by 2
-    // movq    $2, %rdi
-    // movq    %rdi, %mm1
-    // psrlq   %mm1, %mm0
     // Copy 8 high bytes to mm1 
-    movq    %mm0, %rsi
-    shrq    $32, %rsi
-    movq    %rsi, %mm1
+    shlq    $32, %rdi
+    movq    %rdi, %mm1
 
     // Load kernel
     leaq    kernel(%rip), %rdi
-    movq    (%rdi), %mm2
+    movq    (%rdi), %rdi
+    movq    %rdi, %mm2
+    shlq    $32, %rdi
+    movq    %rdi, %mm3
     // Multiply and add
     pmaddubsw %mm2, %mm0
-    pmaddubsw %mm2, %mm1
+    pmaddubsw %mm3, %mm1
 
     movq %mm0, %rdi
     movq %mm1, %rsi

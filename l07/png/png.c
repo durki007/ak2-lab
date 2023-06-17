@@ -9,7 +9,7 @@
 extern unsigned char convolute(unsigned long first8, unsigned long last);
 
 void filter(unsigned char *M, unsigned char *W, int width, int height) {
-  for (int i = 0; i < width * (height - 1); i++) {
+  for (int i = 0; i < width * (height - 2) - 1; i++) {
     // Assemble first 8 bytes of matrix
     unsigned long x = 0;
     unsigned int width2 = width << 1;
@@ -37,11 +37,9 @@ long int unpack(unsigned long int x, unsigned long int y, unsigned long last) {
   short *t1 = (short *)&x;
   short *t2 = (short *)&y;
   long int a = t1[0] + t1[1] + t1[2] + t1[3];
-  // a *= 2;
-  a += last;
   long int b = t2[0] + t2[1] + t2[2] + t2[3];
-  // b *= 2;
-  long int normalised = (a + b + 765) / 6;
+  long int sum = a + b + last;
+  long int normalised = ((sum) / 6) + 128;
   if (normalised > 255 || normalised < 0) {
     printf("%ld", normalised);
   }
