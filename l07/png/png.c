@@ -6,39 +6,32 @@
   fprintf(stderr, "ERROR at %s:%d.\n", __FILE__, __LINE__);                    \
   return -1;
 
-extern unsigned char convolute(unsigned long first8, unsigned long last);
+extern unsigned char convolute(unsigned long x);
 
 void filter(unsigned char *M, unsigned char *W, int width, int height) {
   for (int i = 0; i < width * (height - 2) - 1; i++) {
     // Assemble first 8 bytes of matrix
-    unsigned long x = 0;
     unsigned int width2 = width << 1;
-    // Można zrobić szybciej (po 3 naraz)
-    x += M[i];
-    x <<= 8;
-    x += M[i + 1];
-    x <<= 8;
-    x += M[i + 2];
-    x <<= 8;
-    x += M[i + width];
-    x <<= 8;
-    x += M[i + width + 1];
-    x <<= 8;
-    x += M[i + width + 2];
-    x <<= 8;
-    x += M[i + width2];
-    x <<= 8;
-    x += M[i + width2 + 1];
-    W[i + width + 1] = convolute(x, M[i + width2 + 2]);
+    unsigned char bytes[8];
+    bytes[7] = M[i];
+    bytes[6] = M[i + 1];
+    bytes[5] = M[i + width];
+    bytes[4] = 0;
+    bytes[3] = M[i + width + 2];
+    bytes[2] = M[i + width2 + 1];
+    bytes[1] = M[i + width2 + 2];
+    bytes[0] = 0;
+    unsigned long x = *((unsigned long *)bytes);
+    W[i + width + 1] = convolute(x);
   }
 }
 
-long int unpack(unsigned long int x, unsigned long int y, unsigned long last) {
+long int unpack(unsigned long int x, unsigned long int y) {
   short *t1 = (short *)&x;
   short *t2 = (short *)&y;
   long int a = t1[0] + t1[1] + t1[2] + t1[3];
   long int b = t2[0] + t2[1] + t2[2] + t2[3];
-  long int sum = a + b + last;
+  long int sum = b;
   long int normalised = ((sum) / 6) + 128;
   if (normalised > 255 || normalised < 0) {
     printf("%ld", normalised);

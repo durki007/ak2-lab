@@ -1,36 +1,46 @@
 .data
-kernel:
-// Needs to be reversed .dc.b -1, -1, 0, -1, 0, 1, 0, 1, 1
-.dc.b 1, 0, 1, 0, -1, 0, -1, -1
-div2:
-.dc.b 1, 1, 1, 1, 1, 1, 1, 1
+kernel: .dc.b 1, 1, 1, 0, -1, -1, -1, 0 
+shuffle_mask: .dc.b 1, 0, 3, 2, 5, 4, 7, 6 
 .text
 .globl convolute
 .type	convolute, @function
+// RDI: Pointer to first row
+// RSI: Pointer to second row
+// RDX: Pointer to last row
 convolute:
     subq	$8, %rsp
-    // Clean mmx
-    movq    %rsi, %rdx
-    // Load matrix to mmx registers
-    // First 8 bytes
+    // Load values 
+    //   leaq    (%rdi), %rdi
+    //   movw    (%rdi), %ax
+    //   leaq    (%rdx), %rdx
+    //   movw    (%rdx), %bx
+    //   leaq    (%rsi), %rsi
+    //   movl    (%rsi), %ecx
+    //   // Assemble values into RAX
+    //   shlq    $32, %rax
+    //   movl    %ecx, %eax
+    //   shlq    $8, %rax
+    //   movw    %bx, %ax
+    // Move to MMX
     movq    %rdi, %mm0
-    // Copy 8 high bytes to mm1 
-    shlq    $32, %rdi
     movq    %rdi, %mm1
-
     // Load kernel
     leaq    kernel(%rip), %rdi
-    movq    (%rdi), %rdi
-    movq    %rdi, %mm2
-    shlq    $32, %rdi
-    movq    %rdi, %mm3
-    // Multiply and add
+    movq    (%rdi), %mm2
+    // Load shuffle mask
+    leaq    shuffle_mask(%rip), %rdi
+    movq    (%rdi), %mm3
+    // Vertical multiply and add to words
     pmaddubsw %mm2, %mm0
-    pmaddubsw %mm3, %mm1
+    // Shuffle bytes in kernel and input
+    pshufb  %mm3, %mm1
+    pshufb  %mm3, %mm2
+    // Vertical multiply and add to words
+    pmaddubsw %mm2, %mm1
 
-    movq %mm0, %rdi
-    movq %mm1, %rsi
-
+    // Store results to GPR
+    movq    %mm0, %rdi
+    movq    %mm1, %rsi
     call    unpack
 
     addq	$8, %rsp
