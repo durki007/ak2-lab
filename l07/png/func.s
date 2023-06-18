@@ -9,18 +9,6 @@ shuffle_mask: .dc.b 1, 0, 3, 2, 5, 4, 7, 6
 // RDX: Pointer to last row
 convolute:
     subq	$8, %rsp
-    // Load values 
-    //   leaq    (%rdi), %rdi
-    //   movw    (%rdi), %ax
-    //   leaq    (%rdx), %rdx
-    //   movw    (%rdx), %bx
-    //   leaq    (%rsi), %rsi
-    //   movl    (%rsi), %ecx
-    //   // Assemble values into RAX
-    //   shlq    $32, %rax
-    //   movl    %ecx, %eax
-    //   shlq    $8, %rax
-    //   movw    %bx, %ax
     // Move to MMX
     movq    %rdi, %mm0
     movq    %rdi, %mm1
