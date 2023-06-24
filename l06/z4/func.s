@@ -12,6 +12,7 @@ fsw: .space 2
 .type	measure, @function
 measure:
     subq	  $8, %rsp
+    pushq   %rbx
     xor     %rax, %rax
     xor     %rdx, %rdx
     cpuid
@@ -21,6 +22,7 @@ measure:
     movl    %eax, %edx
     mov     %rdx, %rax
 
+    popq    %rbx
     addq	$8, %rsp
     ret
 
@@ -38,7 +40,9 @@ sequential:
     fld1
     fld1
 
-    // Perform (2 + 3) * 1
+    // Perform (2 + 3) + 1
+    faddp
+    faddp
     faddp
     faddp
 
@@ -62,9 +66,11 @@ paralel:
     fld1
     fld1
     faddp
+    faddp
 
     fld1
     fld1
+    faddp
     faddp
 
     decl    %ecx

@@ -66,14 +66,14 @@ main:
     flds    float1
     faddp
     // Store result
-    fstps   floatres
+    fstpl   doubleres
     // Store status word
     fstsw   fsw
     call    print_sw
 
     // Print result
-    mov     floatres, %rdi
-    call    print_result_float
+    mov     doubleres, %rdi
+    call    print_result_double
 
     // Set double mode
     fstcw   fcw

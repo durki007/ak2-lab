@@ -1,5 +1,5 @@
 png: png.c func.s
-	gcc -o png png.c func.s -g -lpng -fPIE
+	gcc -o png png.c func.s -g -lpng -fPIE -O4
 all: png 
 
 clean:
@@ -17,6 +17,9 @@ test: png
 	feh out.png png_images/car_emboss.png
 	./png png_images/tiger.png
 	feh out.png png_images/tiger_emboss.png
+
+profile: png
+	gcc -o png png.c func.s -g -lpng -fPIE -O4 -pg
 	
 
 debug: png
